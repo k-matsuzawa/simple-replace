@@ -19,8 +19,26 @@ func (s Strings) Empty() bool {
 
 func (s Strings) Contains(target string) bool {
 	for _, val := range s {
-		if target == val {
-			return true
+		if strings.Contains(val, "*") {
+			splitStr := strings.Split(val, "*")
+			if len(splitStr) != 2 {
+				continue
+			}
+			if strings.HasPrefix(val, "*") {
+				if strings.HasSuffix(target, splitStr[1]) {
+					return true
+				}
+			} else if strings.HasSuffix(val, "*") {
+				if strings.HasPrefix(target, splitStr[0]) {
+					return true
+				}
+			} else {
+				// FIXME: not implements
+			}
+		} else {
+			if target == val {
+				return true
+			}
 		}
 	}
 	return false
